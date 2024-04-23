@@ -50,6 +50,22 @@ app.put("/api/notes/:id", async (req, res) => {
   }
 });
 
+app.delete("/api/notes/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+
+  if (!id || isNaN(id))
+    return res.status(400).send("Id must be a valid number");
+
+  try {
+    await prisma.note.delete({
+      where: { id },
+    });
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).send("Something went wrong");
+  }
+});
+
 app.listen(5000, () => {
   console.log("server running on localhost:5000");
 });
